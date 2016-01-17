@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ClemLaf\'s ComptesAnd</string>
+    <string name="my_sync_button_text">Synchronisation</string>
+    <string name="my_tolist_button_text">Consultation</string>
+    <string name="my_add_button_text">Ajouter entrée</string>
+    <string name="my_date_txtent_text">Date</string>
+    <string name="my_cps_spin_text">Compte source</string>
+    <string name="my_cpd_spin_text">Compte destination</string>
+    <string name="my_moy_spin_text">Moyen</string>
+    <string name="my_cat_spin_text">Catégorie</string>
+    <string name="my_comm_txtent_text">Commentaire</string>
+    <string name="my_prix_txtent_text">Prix</string>
+    <string name="my_send_button_text">Envoyer</string>
+</resources>
