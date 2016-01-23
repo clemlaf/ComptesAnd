@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ClemLaf\'s ComptesAnd</string>
+    <string name="add_act_name">Ajouter une entrée</string>
     <string name="my_sync_button_text">Synchronisation</string>
     <string name="my_tolist_button_text">Consultation</string>
     <string name="my_add_button_text">Ajouter entrée</string>
