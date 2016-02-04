@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/my_cat_spin_text"
             />
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/my_comm_txtent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -60,5 +60,29 @@
             android:text="@string/my_send_button_text"
             android:onClick="sendForm"
             />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:orientation="horizontal"
+            >
+            <Button  
+                android:id="@+id/my_delete_button"
+                android:layout_width="0dp" 
+                android:layout_height="wrap_content" 
+                android:layout_weight="1"
+                android:text="@string/my_delete_button_text"
+                android:onClick="deleteForm"
+                android:visibility="gone"
+                />
+            <Button  
+                android:id="@+id/my_dupe_button"
+                android:layout_width="0dp" 
+                android:layout_height="wrap_content" 
+                android:layout_weight="1"
+                android:text="@string/my_dupe_button_text"
+                android:onClick="newForm"
+                android:visibility="gone"
+                />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

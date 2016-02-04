@@ -17,13 +17,13 @@
     android:text="@string/my_sync_button_text"
     android:onClick="syncContent"
     />
-<Button  
+<!--Button  
     android:id="@+id/my_tolist_button"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
     android:text="@string/my_tolist_button_text"
     android:onClick="tolistContent"
-    />
+    /-->
 <Button  
     android:id="@+id/my_add_button"
     android:layout_width="fill_parent"
@@ -32,5 +32,10 @@
     android:gravity="center|center_vertical"
     android:onClick="addEntry"
     />
+<ListView
+    android:id="@+id/my_list_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+</ListView>
 </LinearLayout>
 

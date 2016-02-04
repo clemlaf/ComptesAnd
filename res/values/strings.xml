@@ -12,5 +12,12 @@
     <string name="my_cat_spin_text">Catégorie</string>
     <string name="my_comm_txtent_text">Commentaire</string>
     <string name="my_prix_txtent_text">Prix</string>
-    <string name="my_send_button_text">Envoyer</string>
+    <string name="my_send_button_text">Enregistrer</string>
+    <string name="my_delete_button_text">Supprimer</string>
+    <string name="my_dupe_button_text">Dupliquer</string>
+    <string name="my_saved_toast_text">Entrée sauvegardée</string>
+    <string name="my_synced_toast_text">Paramètres synchronisés</string>
+    <string name="my_deleted_toast_text">Entrée supprimée</string>
+    <string name="my_errj_toast_text">Erreur JSON</string>
+    <string name="my_errc_toast_text">Erreur Connection</string>
 </resources>
