@@ -5,6 +5,10 @@
     <string name="my_sync_button_text">Synchronisation</string>
     <string name="my_tolist_button_text">Consultation</string>
     <string name="my_add_button_text">Ajouter entrée</string>
+    <string name="my_showprev_button_text">Afficher précédents</string>
+    <string name="my_shownext_button_text">Afficher suivants</string>
+    <string name="my_showsync_button_text">Afficher synchronisés</string>
+    <string name="my_showunsync_button_text">Afficher non-synchronisés</string>
     <string name="my_date_txtent_text">Date</string>
     <string name="my_cps_spin_text">Compte source</string>
     <string name="my_cpd_spin_text">Compte destination</string>

@@ -134,6 +134,63 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
                 EntreesEntry.C_SYN},
                     null, null, null, null, null);
     }
+    public Cursor getUnSyncedEntrees(){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String tablename= EntreesEntry.TABLE_NAME +
+            " e INNER JOIN " + ComptesEntry.TABLE_NAME + " s ON e." +
+            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID + 
+            " LEFT OUTER JOIN " + ComptesEntry.TABLE_NAME + " d ON e." +
+            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID + 
+            " LEFT OUTER JOIN " + CategoryEntry.TABLE_NAME + " c ON e." +
+            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID + 
+            " LEFT OUTER JOIN " + MoyensEntry.TABLE_NAME + " m ON e." +
+            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ; 
+        String selection= EntreesEntry.C_SYN + "=0";
+        return db.query(tablename,
+                new String[]{"e." + EntreesEntry._ID,
+                    EntreesEntry.C_DAT,
+                    "s." + ComptesEntry.C_NAME + " s_" + ComptesEntry.C_NAME,
+                    EntreesEntry.C_CPS,
+                    "d." + ComptesEntry.C_NAME + " d_" + ComptesEntry.C_NAME,
+                    EntreesEntry.C_CPD,
+                    "c." + CategoryEntry.C_NAME,
+                    EntreesEntry.C_CAT,
+                    "m." + MoyensEntry.C_NAME,
+                    EntreesEntry.C_MOY,
+                    EntreesEntry.C_COM,
+                    EntreesEntry.C_PRI,
+                EntreesEntry.C_SYN},
+                    selection, null, null, null, null);
+    }
+    public Cursor getSyncedEntrees(int page, int limit){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String tablename= EntreesEntry.TABLE_NAME +
+            " e INNER JOIN " + ComptesEntry.TABLE_NAME + " s ON e." +
+            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID + 
+            " LEFT OUTER JOIN " + ComptesEntry.TABLE_NAME + " d ON e." +
+            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID + 
+            " LEFT OUTER JOIN " + CategoryEntry.TABLE_NAME + " c ON e." +
+            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID + 
+            " LEFT OUTER JOIN " + MoyensEntry.TABLE_NAME + " m ON e." +
+            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ; 
+        String selection= EntreesEntry.C_SYN + "=1";
+	String limits= ""+(page*limit)+", "+limit;
+        return db.query(tablename,
+                new String[]{"e." + EntreesEntry._ID,
+                    EntreesEntry.C_DAT,
+                    "s." + ComptesEntry.C_NAME + " s_" + ComptesEntry.C_NAME,
+                    EntreesEntry.C_CPS,
+                    "d." + ComptesEntry.C_NAME + " d_" + ComptesEntry.C_NAME,
+                    EntreesEntry.C_CPD,
+                    "c." + CategoryEntry.C_NAME,
+                    EntreesEntry.C_CAT,
+                    "m." + MoyensEntry.C_NAME,
+                    EntreesEntry.C_MOY,
+                    EntreesEntry.C_COM,
+                    EntreesEntry.C_PRI,
+                EntreesEntry.C_SYN},
+                    selection, null, null, null,null, limits);
+    }
     public Cursor getCompletions(){
         SQLiteDatabase db=this.getReadableDatabase();
         return db.query( EntreesEntry.TABLE_NAME, new String[]{EntreesEntry._ID,EntreesEntry.C_COM}, null, null, null, null, null);
@@ -172,6 +229,13 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
                     EntreesEntry.C_SYN
                 }, selection, new String[]{ String.valueOf(id)},
                     null, null, null);
+    }
+    public int putSync(long id){
+        SQLiteDatabase db=this.getWritableDatabase();
+        String selection= EntreesEntry._ID + " LIKE ?";
+        ContentValues values=new ContentValues();
+        values.put(EntreesEntry.C_SYN, 1);
+        return db.update(EntreesEntry.TABLE_NAME,values,selection,new String[]{String.valueOf(id)});
     }
     public int deleteEntree(long id){
         SQLiteDatabase db=this.getWritableDatabase();

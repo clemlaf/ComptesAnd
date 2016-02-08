@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:id="@+id/my_header_text"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="Welcome to Clemlaf's ComptesAnd"
-    />
-<Button  
-    android:id="@+id/my_sync_button"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
-    android:text="@string/my_sync_button_text"
-    android:onClick="syncContent"
-    />
-<!--Button  
-    android:id="@+id/my_tolist_button"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
-    android:text="@string/my_tolist_button_text"
-    android:onClick="tolistContent"
-    /-->
-<Button  
-    android:id="@+id/my_add_button"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
-    android:text="@string/my_add_button_text"
-    android:gravity="center|center_vertical"
-    android:onClick="addEntry"
-    />
-<ListView
-    android:id="@+id/my_list_view"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-</ListView>
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	>
+	<Button  
+		android:id="@+id/my_sync_button"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/my_sync_button_text"
+		android:onClick="syncContent"
+		/>
+	<Button  
+		android:id="@+id/my_add_button"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/my_add_button_text"
+		android:gravity="center|center_vertical"
+		android:onClick="addEntry"
+		/>
+	<Button  
+		android:id="@+id/my_showsync_button"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/my_showsync_button_text"
+		android:onClick="switchSync"
+		/>
+	<Button  
+		android:id="@+id/my_showprev_button"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/my_showprev_button_text"
+		android:onClick="prevPage"
+		/>
+	<ListView
+		android:id="@+id/my_list_view"
+		android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		>
+	</ListView>
+	<Button  
+		android:id="@+id/my_shownext_button"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/my_shownext_button_text"
+		android:onClick="nextPage"
+		/>
 </LinearLayout>
 

@@ -24,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.database.Cursor;
+import android.util.Log;
 
 //public class AddActivity extends AppCompatActivity
 public class AddActivity extends Activity
@@ -162,6 +163,13 @@ public class AddActivity extends Activity
     private void setDateTimeField() {
         //dateETxt.setOnClickListener(this);
         Calendar newCalendar=Calendar.getInstance();
+	String dateString=dateETxt.getText().toString();
+	if(dateString!=null)
+            try{
+            newCalendar.setTime(dateFormatter.parse(dateString));
+            }catch (Exception e){
+                Log.e("CLEMLAF","erreur Date");
+            }
         myDatePickerDialog= new DatePickerDialog(this, new OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
