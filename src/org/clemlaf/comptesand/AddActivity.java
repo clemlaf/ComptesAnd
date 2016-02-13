@@ -17,7 +17,7 @@ import android.widget.Toast;
 //import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.EditText;
-import android.widget.AutoCompleteTextView;
+//import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,7 +32,7 @@ public class AddActivity extends Activity
     private long curId=-1;
     private int isSynced=0;
     private EditText dateETxt;
-    private AutoCompleteTextView commETxt;
+    private EditText commETxt;
     private EditText prixETxt;
     private Spinner cpsSpin;
     private Spinner cpdSpin;
@@ -79,7 +79,7 @@ public class AddActivity extends Activity
     private void findViewByIds(){
         dateETxt= (EditText) findViewById(R.id.my_date_txtent);
         dateETxt.setInputType(InputType.TYPE_NULL);
-        commETxt=(AutoCompleteTextView) findViewById(R.id.my_comm_txtent);
+        commETxt=(EditText) findViewById(R.id.my_comm_txtent);
         prixETxt=(EditText) findViewById(R.id.my_prix_txtent);
         cpsSpin=(Spinner) findViewById(R.id.my_cps_spin);
         cpdSpin=(Spinner) findViewById(R.id.my_cpd_spin);
@@ -114,7 +114,7 @@ public class AddActivity extends Activity
 			new int[] { android.R.id.text1}	);
 	moyAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	moySpin.setAdapter(moyAdapt);
-	SimpleCursorAdapter commAdapt= new SimpleCursorAdapter(this,
+	/*SimpleCursorAdapter commAdapt= new SimpleCursorAdapter(this,
 			android.R.layout.simple_dropdown_item_1line,
 			myDBOH.getCompletions(),
 			new String[] { MyDatabaseOpenHelper.EntreesEntry.C_COM },
@@ -127,7 +127,7 @@ public class AddActivity extends Activity
                 final String str = cursor.getString(columnIndex);
                 return str;
             }
-        });
+        });*/
         if (curId>0){
             Cursor cc=myDBOH.getEntree(curId);
             cc.moveToFirst();

@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/my_cat_spin_text"
             />
-        <AutoCompleteTextView
+        <EditText
             android:id="@+id/my_comm_txtent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

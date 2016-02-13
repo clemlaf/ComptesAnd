@@ -8,7 +8,9 @@
     <string name="my_showprev_button_text">Afficher précédents</string>
     <string name="my_shownext_button_text">Afficher suivants</string>
     <string name="my_showsync_button_text">Afficher synchronisés</string>
-    <string name="my_showunsync_button_text">Afficher non-synchronisés</string>
+    <string name="my_showunsync_button_text">Afficher non synchronisés</string>
+    <string name="my_unsync_list_title">Liste des entrées pas encore synchronisées</string>
+    <string name="my_sync_list_title">Liste des entrées déjà synchronisées</string>
     <string name="my_date_txtent_text">Date</string>
     <string name="my_cps_spin_text">Compte source</string>
     <string name="my_cpd_spin_text">Compte destination</string>
@@ -24,4 +26,18 @@
     <string name="my_deleted_toast_text">Entrée supprimée</string>
     <string name="my_errj_toast_text">Erreur JSON</string>
     <string name="my_errc_toast_text">Erreur Connection</string>
+    <string name="my_errnoc_toast_text">Pas de connection !</string>
+    <string name="my_pref_hostname">org.clemlaf.comptesand.HOSTNAME</string>
+    <string name="my_pref_file_key">org.clemlaf.comptesand.PREFERENCES</string>
+    <string name="my_update_address">/update</string>
+    <string name="my_param_address">/param/list</string>
+    <string name="my_pref_nothome">org.clemlaf.comptesand.NOTHOME</string>
+    <string name="my_pref_nothome_title">Suis-je à l\'extérieur ?</string>
+    <string name="my_pref_nothome_sum">Cocher la case pour utiliser l\'adresse sur le réseau externe</string>
+    <string name="my_pref_home_hostname">org.clemlaf.comptesand.HOME_HOSTNAME</string>
+    <string name="my_pref_home_hn_title">Adresse site comptes à la maison</string>
+    <string name="my_pref_home_hn_sum">Adresse à laquelle se connecter pour la synchronisation sur le réseau local</string>
+    <string name="my_pref_out_hostname">org.clemlaf.comptesand.OUT_HOSTNAME</string>
+    <string name="my_pref_out_hn_title">Adresse site comptes à l\'extérieur</string>
+    <string name="my_pref_out_hn_sum">Adresse à laquelle se connecter pour la synchronisation sur le réseau externe</string>
 </resources>

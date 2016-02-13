@@ -7,15 +7,19 @@ import android.content.Intent;
 import android.content.Context;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.widget.SimpleCursorAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.Button;
 import android.os.AsyncTask;
 import java.io.*;
 import java.net.*;
+import android.net.*;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.security.cert.CertificateFactory;
@@ -33,12 +37,17 @@ public class MainActivity extends Activity
     private int syncpage=0;
     private int synclimit=30;
     private boolean endsync=false;
+    private SharedPreferences sharedPref;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        sharedPref=this.getSharedPreferences(getString(R.string.my_pref_file_key),Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPref.edit();
+        editor.putString(getString(R.string.my_pref_hostname), "https://macbook/comptes");
+        editor.commit();
         populateList();
         showHideButtons();
     }
@@ -59,10 +68,13 @@ public class MainActivity extends Activity
             else
                 ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.VISIBLE);
             ((Button) findViewById(R.id.my_showsync_button)).setText(getString(R.string.my_showunsync_button_text));
+            ((TextView) findViewById(R.id.my_list_title)).setText(getString(R.string.my_sync_list_title));
+
         }else{
             ((Button) findViewById(R.id.my_showprev_button)).setVisibility(Button.GONE);
             ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.GONE);
             ((Button) findViewById(R.id.my_showsync_button)).setText(getString(R.string.my_showsync_button_text));
+            ((TextView) findViewById(R.id.my_list_title)).setText(getString(R.string.my_unsync_list_title));
         }
     }
     private void populateList(){
@@ -74,6 +86,9 @@ public class MainActivity extends Activity
                 new String[] { 
                     MyDatabaseOpenHelper.EntreesEntry.C_DAT,
                     "s_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
+                    "d_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
+                    MyDatabaseOpenHelper.CategoryEntry.C_NAME,
+                    MyDatabaseOpenHelper.MoyensEntry.C_NAME,
                     //MyDatabaseOpenHelper.EntreesEntry.C_CPS,
                     MyDatabaseOpenHelper.EntreesEntry.C_COM,
                     MyDatabaseOpenHelper.EntreesEntry.C_PRI
@@ -81,6 +96,9 @@ public class MainActivity extends Activity
                 new int[] { 
                     R.id.my_list_date,
                     R.id.my_list_cps,
+                    R.id.my_list_cpd,
+                    R.id.my_list_cat,
+                    R.id.my_list_moy,
                     R.id.my_list_com,
                     R.id.my_list_prix,
                 }	);
@@ -133,10 +151,19 @@ public class MainActivity extends Activity
         showHideButtons();
     }
     public void syncContent(View v){
-        new DownloadWebpageTask(this).execute(new String[]{
-            "https://macbook/comptes/update",
-            "https://macbook/comptes/param/list"
-        });
+        ConnectivityManager connMgr = (ConnectivityManager) 
+            getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        String hostn=this.sharedPref.getString(getString(R.string.my_pref_hostname),"");
+        if (networkInfo != null && networkInfo.isConnected() && hostn.length()>0) {
+            new DownloadWebpageTask(this).execute(new String[]{
+                hostn+getString(R.string.my_update_address),
+                hostn+getString(R.string.my_param_address)
+            });
+        } else {
+            Toast.makeText(this,getString(R.string.my_errnoc_toast_text),Toast.LENGTH_SHORT).show();
+        }
+
     }
     public void prevPage(View v){
         this.syncpage=max(this.syncpage-1,0);

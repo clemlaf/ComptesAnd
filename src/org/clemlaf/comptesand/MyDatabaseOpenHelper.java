@@ -178,6 +178,9 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
         return db.query(tablename,
                 new String[]{"e." + EntreesEntry._ID,
                     EntreesEntry.C_DAT,
+                    "substr(" + EntreesEntry.C_DAT + ", 7, 4) y" , 
+                    "substr(" + EntreesEntry.C_DAT + ", 4, 2) m" , 
+                    "substr(" + EntreesEntry.C_DAT + ",1,2) d",
                     "s." + ComptesEntry.C_NAME + " s_" + ComptesEntry.C_NAME,
                     EntreesEntry.C_CPS,
                     "d." + ComptesEntry.C_NAME + " d_" + ComptesEntry.C_NAME,
@@ -189,7 +192,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
                     EntreesEntry.C_COM,
                     EntreesEntry.C_PRI,
                 EntreesEntry.C_SYN},
-                    selection, null, null, null,null, limits);
+                    selection, null, null, null, "y,m,d", limits);
     }
     public Cursor getCompletions(){
         SQLiteDatabase db=this.getReadableDatabase();
