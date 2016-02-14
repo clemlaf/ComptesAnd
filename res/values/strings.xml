@@ -27,6 +27,7 @@
     <string name="my_errj_toast_text">Erreur JSON</string>
     <string name="my_errc_toast_text">Erreur Connection</string>
     <string name="my_errnoc_toast_text">Pas de connection !</string>
+    <string name="my_errnohn_toast_text">Le site des comptes n\'est pas défini, voir les options</string>
     <string name="my_pref_hostname">org.clemlaf.comptesand.HOSTNAME</string>
     <string name="my_pref_file_key">org.clemlaf.comptesand.PREFERENCES</string>
     <string name="my_update_address">/update</string>
@@ -40,4 +41,5 @@
     <string name="my_pref_out_hostname">org.clemlaf.comptesand.OUT_HOSTNAME</string>
     <string name="my_pref_out_hn_title">Adresse site comptes à l\'extérieur</string>
     <string name="my_pref_out_hn_sum">Adresse à laquelle se connecter pour la synchronisation sur le réseau externe</string>
+    <string name="my_settings_title">Options</string>
 </resources>

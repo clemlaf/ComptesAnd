@@ -9,11 +9,13 @@
         android:key="@string/my_pref_home_hostname"
         android:title="@string/my_pref_home_hn_title"
         android:summary="@string/my_pref_home_hn_sum"
+        android:inputType="textUri"
         />
     <EditTextPreference
         android:key="@string/my_pref_out_hostname"
         android:title="@string/my_pref_out_hn_title"
         android:summary="@string/my_pref_out_hn_sum"
+        android:inputType="textUri"
         />
     <!-- to add nubmer Preference for the number of synced item by page.-->
 </PreferenceScreen>

@@ -3,12 +3,15 @@ package org.clemlaf.comptesand;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.content.Intent;
 import android.content.Context;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.preference.PreferenceManager;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.widget.SimpleCursorAdapter;
 import android.widget.ListView;
@@ -44,10 +47,7 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        sharedPref=this.getSharedPreferences(getString(R.string.my_pref_file_key),Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPref.edit();
-        editor.putString(getString(R.string.my_pref_hostname), "https://macbook/comptes");
-        editor.commit();
+        sharedPref= PreferenceManager.getDefaultSharedPreferences(this);
         populateList();
         showHideButtons();
     }
@@ -56,6 +56,24 @@ public class MainActivity extends Activity
         super.onResume();
         populateList();
         showHideButtons();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.my_settings:
+                Intent intent=new Intent(this, PrefActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     private void showHideButtons(){
         if(synced){
@@ -154,12 +172,19 @@ public class MainActivity extends Activity
         ConnectivityManager connMgr = (ConnectivityManager) 
             getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        String hostn=this.sharedPref.getString(getString(R.string.my_pref_hostname),"");
+        String hostn="";
+        if(this.sharedPref.getBoolean(getString(R.string.my_pref_nothome),false)){
+            hostn=this.sharedPref.getString(getString(R.string.my_pref_out_hostname),"");
+        }else{
+            hostn=this.sharedPref.getString(getString(R.string.my_pref_home_hostname),"");
+        }
         if (networkInfo != null && networkInfo.isConnected() && hostn.length()>0) {
             new DownloadWebpageTask(this).execute(new String[]{
                 hostn+getString(R.string.my_update_address),
                 hostn+getString(R.string.my_param_address)
             });
+        } else if (hostn.length()==0) {
+            Toast.makeText(this,getString(R.string.my_errnohn_toast_text),Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this,getString(R.string.my_errnoc_toast_text),Toast.LENGTH_SHORT).show();
         }
