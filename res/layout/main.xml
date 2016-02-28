@@ -46,26 +46,11 @@
         android:background="?android:attr/listDivider"
         android:layout_marginTop="2dp"
         />
-    <Button  
-        android:id="@+id/my_showprev_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:text="@string/my_showprev_button_text"
-        android:onClick="prevPage"
-        />
-    <ListView
-        android:id="@+id/my_list_view"
-        android:layout_width="fill_parent"
+    <android.support.v4.view.ViewPager 
+        android:id="@+id/my_viewpager"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        >
-    </ListView>
-    <Button  
-        android:id="@+id/my_shownext_button"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:text="@string/my_shownext_button_text"
-        android:onClick="nextPage"
+        android:layout_weight="1"
         />
 </LinearLayout>
 

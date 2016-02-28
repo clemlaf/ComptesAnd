@@ -1,11 +1,14 @@
 package org.clemlaf.comptesand;
 
+//import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
+import android.view.LayoutInflater;
 import android.content.Intent;
 import android.content.Context;
 import android.app.AlertDialog;
@@ -30,11 +33,21 @@ import java.security.KeyStore;
 import javax.net.ssl.*;
 import org.json.*;
 import android.util.Log;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.app.NotificationManager;
 import static java.lang.Math.max;
 
-public class MainActivity extends Activity
+public class MainActivity extends FragmentActivity
 {
+    static final int NUM_ITEMS=2;
     public static String EXTRAID="org.clemlaf.comptesand.SelectedId";
+    private ViewPager vp;
+    private MyAdapter ad;
     private ListView lst;
     private boolean synced=false;
     private int syncpage=0;
@@ -77,76 +90,28 @@ public class MainActivity extends Activity
     }
     private void showHideButtons(){
         if(synced){
-            if(this.syncpage>0)
+/*            if(this.syncpage>0)
                 ((Button) findViewById(R.id.my_showprev_button)).setVisibility(Button.VISIBLE);
             else
                 ((Button) findViewById(R.id.my_showprev_button)).setVisibility(Button.GONE);
             if(this.endsync)
                 ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.GONE);
             else
-                ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.VISIBLE);
+                ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.VISIBLE);*/
             ((Button) findViewById(R.id.my_showsync_button)).setText(getString(R.string.my_showunsync_button_text));
             ((TextView) findViewById(R.id.my_list_title)).setText(getString(R.string.my_sync_list_title));
 
         }else{
-            ((Button) findViewById(R.id.my_showprev_button)).setVisibility(Button.GONE);
-            ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.GONE);
+/*            ((Button) findViewById(R.id.my_showprev_button)).setVisibility(Button.GONE);
+            ((Button) findViewById(R.id.my_shownext_button)).setVisibility(Button.GONE);*/
             ((Button) findViewById(R.id.my_showsync_button)).setText(getString(R.string.my_showsync_button_text));
             ((TextView) findViewById(R.id.my_list_title)).setText(getString(R.string.my_unsync_list_title));
         }
     }
     private void populateList(){
-        this.lst=(ListView)findViewById(R.id.my_list_view);
-        MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
-        SimpleCursorAdapter listAdapt= new SimpleCursorAdapter(this,
-                R.layout.listitem,
-                null,
-                new String[] { 
-                    MyDatabaseOpenHelper.EntreesEntry.C_DAT,
-                    "s_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
-                    "d_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
-                    MyDatabaseOpenHelper.CategoryEntry.C_NAME,
-                    MyDatabaseOpenHelper.MoyensEntry.C_NAME,
-                    //MyDatabaseOpenHelper.EntreesEntry.C_CPS,
-                    MyDatabaseOpenHelper.EntreesEntry.C_COM,
-                    MyDatabaseOpenHelper.EntreesEntry.C_PRI
-                },
-                new int[] { 
-                    R.id.my_list_date,
-                    R.id.my_list_cps,
-                    R.id.my_list_cpd,
-                    R.id.my_list_cat,
-                    R.id.my_list_moy,
-                    R.id.my_list_com,
-                    R.id.my_list_prix,
-                }	);
-	if(this.synced){
-            listAdapt.changeCursor(myDBOH.getSyncedEntrees(this.syncpage,this.synclimit));
-            if(listAdapt.getCount()>=this.synclimit){
-                this.endsync=false;
-            }else{
-                this.endsync=true;
-            }
-	}else{
-            listAdapt.changeCursor(myDBOH.getUnSyncedEntrees());
-        }
-        lst.setAdapter(listAdapt);
-        lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-
-                Cursor cc= (Cursor) lst.getItemAtPosition(position);
-                Intent newint= new Intent(lst.getContext(),AddActivity.class);
-                newint.putExtra(EXTRAID,cc.getLong(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry._ID)));
-                startActivity(newint);
-                /* write you handling code like...
-                 *     String st = "sdcard/";
-                 *         File f = new File(st+o.toString());
-                 *             // do whatever u want to do with 'f' File object
-                 *                 */  
-            }
-        });
+        this.vp=(ViewPager) findViewById(R.id.my_viewpager);
+        ad=new MyAdapter(getSupportFragmentManager());
+        vp.setAdapter(ad);
     }
     public void addEntry(View v){
         /*AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -169,7 +134,7 @@ public class MainActivity extends Activity
         showHideButtons();
     }
     public void syncContent(View v){
-        ConnectivityManager connMgr = (ConnectivityManager) 
+        ConnectivityManager connMgr = (ConnectivityManager)
             getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         String hostn="";
@@ -203,11 +168,18 @@ public class MainActivity extends Activity
     }
     private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         private MainActivity myContext;
+        private int nid=1;
         public DownloadWebpageTask(MainActivity cont){
             myContext=cont;
         }
         @Override
         protected String doInBackground(String... urls) {
+            NotificationCompat.Builder myNotBuilder= new NotificationCompat.Builder(this.myContext)
+                .setContentTitle(getString(R.string.my_not_title))
+                .setContentText(getString(R.string.my_not_text))
+                .setSmallIcon(android.R.drawable.ic_popup_sync);
+            NotificationManager myNot=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            myNot.notify(this.nid,myNotBuilder.build());
             MyDatabaseOpenHelper myDBOH = new MyDatabaseOpenHelper(this.myContext);
             Cursor cc=myDBOH.getAllEntrees();
             while(cc.moveToNext()){
@@ -279,6 +251,8 @@ public class MainActivity extends Activity
                 Log.e("CLEMLAF",result);
         Toast.makeText(this.myContext,getString(R.string.my_errj_toast_text),Toast.LENGTH_SHORT).show();
             }
+            NotificationManager myNot=(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            myNot.cancel(this.nid);
         }
         private String downloadUrl(String myurl, String params) throws IOException {
             InputStream is = null;
@@ -287,46 +261,60 @@ public class MainActivity extends Activity
 
             // Load CAs from an InputStream
             // (could be from a resource or ByteArrayInputStream or ...)
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            InputStream caInput = this.myContext.getResources().openRawResource(R.raw.macbook);
+            String path=this.myContext.sharedPref.getString(getString(R.string.my_pref_crt_path),"");
+            SSLContext context=null;
+            if (path.length()>0){
+                CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                File caFile=new File(path);
+                InputStream caInput = new BufferedInputStream(new FileInputStream(caFile));
+                //this.myContext.getResources().openRawResource(R.raw.macbook);
                 //new BufferedInputStream(MainActivity.context.getAssets().open("littlesvr.crt"));
-            Certificate ca = cf.generateCertificate(caInput);
-            Log.e("CLEMLAF","ca=" + ((X509Certificate) ca).getSubjectDN());
-            // Create a KeyStore containing our trusted CAs
-            String keyStoreType = KeyStore.getDefaultType();
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry("ca", ca);
-            
-            // Create a TrustManager that trusts the CAs in our KeyStore
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(keyStore);
-            
-            // Create an SSLContext that uses our TrustManager
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, tmf.getTrustManagers(), null);
+                Certificate ca = cf.generateCertificate(caInput);
+                Log.e("CLEMLAF","ca=" + ((X509Certificate) ca).getSubjectDN());
+                // Create a KeyStore containing our trusted CAs
+                String keyStoreType = KeyStore.getDefaultType();
+                KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+                keyStore.load(null, null);
+                keyStore.setCertificateEntry("ca", ca);
+
+                // Create a TrustManager that trusts the CAs in our KeyStore
+                String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+                tmf.init(keyStore);
+
+                // Create an SSLContext that uses our TrustManager
+                context = SSLContext.getInstance("TLS");
+                context.init(null, tmf.getTrustManagers(), null);
+            }
             Log.e("CLEMLAF",myurl);
                 URL url = new URL(myurl);
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setSSLSocketFactory(context.getSocketFactory());
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                //Send request
-                DataOutputStream wr = new DataOutputStream (
-                        conn.getOutputStream ());
-                wr.writeBytes (params);
-                wr.flush ();
-                wr.close ();
-                // Starts the query
-                //conn.connect();
-                int response = conn.getResponseCode();
-                Log.e("CLEMLAF",""+response);
-                //Log.d(DEBUG_TAG, "The response is: " + response);
-                is = conn.getInputStream();
+                int response;
+                HttpURLConnection conn=null;
+                if(myurl.startsWith("https://")){
+                    HttpsURLConnection conns = (HttpsURLConnection) url.openConnection();
+                    if(context!=null)
+                        conns.setSSLSocketFactory(context.getSocketFactory());
+                        conn= (HttpURLConnection) conns;
+                    }else{
+                    conn = (HttpURLConnection) url.openConnection();
+                }
+                    conn.setReadTimeout(10000 /* milliseconds */);
+                    conn.setConnectTimeout(15000 /* milliseconds */);
+                    conn.setRequestMethod("POST");
+                    conn.setDoInput(true);
+                    conn.setDoOutput(true);
+                    //Send request
+                    DataOutputStream wr = new DataOutputStream (
+                            conn.getOutputStream ());
+                    wr.writeBytes (params);
+                    wr.flush ();
+                    wr.close ();
+                    // Starts the query
+                    //conn.connect();
+                    response = conn.getResponseCode();
+                    Log.e("CLEMLAF",""+response);
+                    //Log.d(DEBUG_TAG, "The response is: " + response);
+                    is = conn.getInputStream();
                 if(params.length()==0){
 
                 // Convert the InputStream into a string
@@ -339,13 +327,13 @@ public class MainActivity extends Activity
                 // Makes sure that the InputStream is closed after the app is
                 // finished using it.
             } catch (Exception e){
-                Log.e("CLEMLAF","erreur SSL");
+                Log.e("CLEMLAF","erreur Connection");
                 return "erreur";
             }
             finally {
                 if (is != null) {
                     is.close();
-                } 
+                }
             }
         }
         // Reads an InputStream and converts it to a String.
@@ -360,4 +348,108 @@ public class MainActivity extends Activity
             return sb.toString();
         }
     }
+     public static class MyAdapter extends FragmentPagerAdapter {
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if(position==0){
+                return new UnSyncedFragment();
+            }else{
+                return new SyncedFragment();
+            }
+        }
+    }
+    // Instances of this class are fragments representing a single
+    // object in our collection.
+    public static class SyncedFragment extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater,
+                ViewGroup container, Bundle savedInstanceState) {
+            // The last two arguments ensure LayoutParams are inflated
+            // properly.
+                MainActivity ma=(MainActivity) getActivity();
+            View rootView = inflater.inflate(
+                    R.layout.synced, container, false);
+            ListView lst=(ListView) rootView.findViewById(R.id.my_slist_view);
+        MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(ma);
+        SimpleCursorAdapter listAdapt= new SimpleCursorAdapter(ma,
+                R.layout.listitem,
+                null,
+                new String[] {
+                    MyDatabaseOpenHelper.EntreesEntry.C_DAT,
+                    "s_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
+                    "d_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
+                    MyDatabaseOpenHelper.CategoryEntry.C_NAME,
+                    MyDatabaseOpenHelper.MoyensEntry.C_NAME,
+                    //MyDatabaseOpenHelper.EntreesEntry.C_CPS,
+                    MyDatabaseOpenHelper.EntreesEntry.C_COM,
+                    MyDatabaseOpenHelper.EntreesEntry.C_PRI
+                },
+                new int[] {
+                    R.id.my_list_date,
+                    R.id.my_list_cps,
+                    R.id.my_list_cpd,
+                    R.id.my_list_cat,
+                    R.id.my_list_moy,
+                    R.id.my_list_com,
+                    R.id.my_list_prix,
+                }	);
+            listAdapt.changeCursor(myDBOH.getSyncedEntrees(ma.syncpage,ma.synclimit));
+            if(listAdapt.getCount()>=ma.synclimit){
+                ma.endsync=false;
+            }else{
+                ma.endsync=true;
+            }
+        lst.setAdapter(listAdapt);
+            return rootView;
+        }
+    }
+    public static class UnSyncedFragment extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater,
+                ViewGroup container, Bundle savedInstanceState) {
+            // The last two arguments ensure LayoutParams are inflated
+            // properly.
+            View rootView = inflater.inflate(
+                    R.layout.unsynced, container, false);
+            ListView lst=(ListView) rootView.findViewById(R.id.my_ulist_view);
+        MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(getActivity());
+        SimpleCursorAdapter listAdapt= new SimpleCursorAdapter(getActivity(),
+                R.layout.listitem,
+                null,
+                new String[] {
+                    MyDatabaseOpenHelper.EntreesEntry.C_DAT,
+                    "s_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
+                    "d_" + MyDatabaseOpenHelper.ComptesEntry.C_NAME,
+                    MyDatabaseOpenHelper.CategoryEntry.C_NAME,
+                    MyDatabaseOpenHelper.MoyensEntry.C_NAME,
+                    //MyDatabaseOpenHelper.EntreesEntry.C_CPS,
+                    MyDatabaseOpenHelper.EntreesEntry.C_COM,
+                    MyDatabaseOpenHelper.EntreesEntry.C_PRI
+                },
+                new int[] {
+                    R.id.my_list_date,
+                    R.id.my_list_cps,
+                    R.id.my_list_cpd,
+                    R.id.my_list_cat,
+                    R.id.my_list_moy,
+                    R.id.my_list_com,
+                    R.id.my_list_prix,
+                }	);
+            listAdapt.changeCursor(myDBOH.getUnSyncedEntrees());
+        lst.setAdapter(listAdapt);
+            return rootView;
+        }
+    }
+
 }
