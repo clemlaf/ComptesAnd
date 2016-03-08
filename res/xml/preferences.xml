@@ -25,5 +25,12 @@
         android:title="@string/my_pref_crt_path_title"
         android:inputType="textUri"
         />
+    <EditTextPreference
+        android:id="@+id/my_pref_nbpage_id"
+        android:key="@string/my_pref_nbpage"
+        android:title="@string/my_pref_nbpage_title"
+        android:inputType="number"
+        android:defaultValue="30"
+        />
     <!-- to add nubmer Preference for the number of synced item by page.-->
 </PreferenceScreen>

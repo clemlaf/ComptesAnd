@@ -27,19 +27,6 @@
             android:onClick="addEntry"
             />
     </LinearLayout>
-    <Button  
-        android:id="@+id/my_showsync_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:text="@string/my_showsync_button_text"
-        android:onClick="switchSync"
-        />
-    <TextView
-        android:id="@+id/my_list_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        android:text="@string/my_unsync_list_title"
-        />
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -51,6 +38,14 @@
         android:layout_height="0dp"
         android:layout_width="fill_parent"
         android:layout_weight="1"
-        />
+        >
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pager_title_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            />
+    </android.support.v4.view.ViewPager>
+
 </LinearLayout>
 
