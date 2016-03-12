@@ -11,6 +11,7 @@ import java.security.cert.X509Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.KeyStore;
 import javax.net.ssl.*;
+import java.util.ArrayList;
 import org.json.*;
 import android.util.Log;
 import android.support.v4.app.NotificationCompat;
@@ -53,8 +54,11 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
   @Override
   protected String doInBackground(String... urls) {
     Cursor cc=myDBOH.getAllEntrees();
+    JSONArray entrees=new JSONArray();
+    ArrayList<Long> idList=new ArrayList<Long>();
     while(cc.moveToNext()){
-      String ent="null";
+      JSONObject ent=new JSONObject();
+      // String ent="null";
       try{
         long id=cc.getLong(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry._ID));
         int cps= cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CPS));
@@ -63,38 +67,53 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         int moy= cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_MOY));
         int syn= cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_SYN));
         if(syn==0){
-          ent="id=new&date="+
+          idList.add(id);
+          ent.put("id","new");
+          ent.put("date",cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_DAT)));
+          ent.put("cp_s",cps==0 ? "" : cps);
+          ent.put("cp_d",cpd==0 ? "" : cpd);
+          ent.put("cat", cat==0 ? "" : cat);
+          ent.put("moy", moy==0 ? "" : moy);
+          ent.put("com",cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM)));
+          ent.put("pr",cc.getFloat(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_PRI)));
+          ent.put("pt","false");
+          /*ent="id=new&date="+
           cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_DAT))+
           "&cp_s="+(cps==0?"":cps)+
           "&cp_d="+(cpd==0?"":cpd)+
-          "&cat="+(cat==0?"":cat)+
+          "&cat="+ (cat==0?"":cat)+
           "&com="+
           URLEncoder.encode(
           cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM)), "UTF-8")+
           "&pr="+
           cc.getFloat(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_PRI))+
-          "&pt=false&moy="+(moy==0?"":moy);
-          String resp=downloadUrl(urls[0],ent);
-          if (resp.equals("200")){
-            myDBOH.putSync(id);
-          }
+          "&pt=false&moy="+(moy==0?"":moy);*/
+          entrees.put(ent);
         }
       } catch (Exception e){
-        Log.e("CLEMLAF",urls[0]);
-        Log.e("CLEMLAF",ent);
+        Log.e("CLEMLAF",ent.toString());
       }
     }
     cc.close();
-    // params comes from the execute() call: params[0] is the url.
     String getUrl="";
-    try {
-
-      Log.e("CLEMLAF",urls[0]);
-      getUrl=downloadUrl(urls[1],"");
+    try{
+      JSONObject pack=new JSONObject();
+      pack.put("entrees", entrees);
+      getUrl=downloadUrl(urls[0],pack);
+      if (getUrl.substring(0,3).equals("200")){
+        for(long aid : idList) {
+          myDBOH.putSync(aid);
+        }
+        getUrl=getUrl.substring(3);
+      }
+    } catch (JSONException e) {
+      Log.e("CLEMLAF","error building json");
+      return "Unable to build up JSON request.";
     } catch (IOException e) {
-      Log.e("CLEMLAF",urls[1]);
+      Log.e("CLEMLAF",urls[0]);
       return "Unable to retrieve web page. URL may be invalid.";
     }
+    // params comes from the execute() call: params[0] is the url.
     return getUrl;
   }
   // onPostExecute displays the results of the AsyncTask.
@@ -128,8 +147,9 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
       myNot.cancel(this.nid);
     }
   }
-  private String downloadUrl(String myurl, String params) throws IOException {
+  private String downloadUrl(String myurl, JSONObject params) throws IOException {
     InputStream is = null;
+    String contentAsString="";
 
     try {
 
@@ -160,9 +180,11 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         context.init(null, tmf.getTrustManagers(), null);
       }
       Log.e("CLEMLAF",myurl);
+      Log.e("CLEMLAF",params.toString());
+      //Log.e("CLEMLAF",URLEncoder.encode(params.toString()));
       URL url = new URL(myurl);
-      int response;
       HttpURLConnection conn=null;
+      // handling the case with ssl connection
       if(myurl.startsWith("https://")){
         HttpsURLConnection conns = (HttpsURLConnection) url.openConnection();
         if(context!=null)
@@ -176,37 +198,37 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
       conn.setRequestMethod("POST");
       conn.setDoInput(true);
       conn.setDoOutput(true);
+      conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+      conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+      conn.setFixedLengthStreamingMode(params.toString().getBytes("utf-8").length);
       //Send request
       DataOutputStream wr = new DataOutputStream (
       conn.getOutputStream ());
-      wr.writeBytes (params);
+      wr.write (params.toString().getBytes("utf-8"));
       wr.flush ();
       wr.close ();
       // Starts the query
       //conn.connect();
-      response = conn.getResponseCode();
+      int response = conn.getResponseCode();
+      contentAsString=""+response;
       Log.e("CLEMLAF",""+response);
       //Log.d(DEBUG_TAG, "The response is: " + response);
       is = conn.getInputStream();
-      if(params.length()==0){
-
         // Convert the InputStream into a string
-        String contentAsString = readIt(is);
-        return contentAsString;
-      }else{
-        return ""+response;
-      }
+      if(response==200)
+        contentAsString += readIt(is);
 
       // Makes sure that the InputStream is closed after the app is
       // finished using it.
     } catch (Exception e){
       Log.e("CLEMLAF","erreur Connection");
-      return "erreur";
+      contentAsString="erreur";
     }
     finally {
       if (is != null) {
         is.close();
       }
+      return contentAsString;
     }
   }
   // Reads an InputStream and converts it to a String.

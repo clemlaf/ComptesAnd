@@ -19,7 +19,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String CATEGORY_TABLE_CREATE =
         "CREATE TABLE " + CategoryEntry.TABLE_NAME + " (" +
         CategoryEntry._ID + " INTEGER PRIMARY KEY," +
-        CategoryEntry.C_ID + " INTEGER, " 
+        CategoryEntry.C_ID + " INTEGER, "
         + CategoryEntry.C_NAME + " TEXT);";
     private static final String CATEGORY_TABLE_DELETE =
         "DROP TABLE IF EXISTS " + CategoryEntry.TABLE_NAME;
@@ -32,7 +32,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String COMPTES_TABLE_CREATE =
         "CREATE TABLE " + ComptesEntry.TABLE_NAME + " (" +
         ComptesEntry._ID + " INTEGER PRIMARY KEY," +
-        ComptesEntry.C_ID + " INTEGER, " 
+        ComptesEntry.C_ID + " INTEGER, "
         + ComptesEntry.C_NAME + " TEXT);";
     private static final String COMPTES_TABLE_DELETE =
         "DROP TABLE IF EXISTS " + ComptesEntry.TABLE_NAME;
@@ -45,11 +45,11 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String MOYENS_TABLE_CREATE =
         "CREATE TABLE " + MoyensEntry.TABLE_NAME + " (" +
         MoyensEntry._ID + " INTEGER PRIMARY KEY," +
-        MoyensEntry.C_ID + " INTEGER, " 
+        MoyensEntry.C_ID + " INTEGER, "
         + MoyensEntry.C_NAME + " TEXT);";
     private static final String MOYENS_TABLE_DELETE =
         "DROP TABLE IF EXISTS " + MoyensEntry.TABLE_NAME;
-    
+
     public static abstract class EntreesEntry implements BaseColumns{
         public static final String TABLE_NAME = "entrees";
         public static final String C_DAT = "dat_id";
@@ -75,7 +75,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
         ");";
     private static final String ENTREES_TABLE_DELETE =
         "DROP TABLE IF EXISTS " + EntreesEntry.TABLE_NAME;
-    
+
     public MyDatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -111,13 +111,13 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         String tablename= EntreesEntry.TABLE_NAME +
             " e INNER JOIN " + ComptesEntry.TABLE_NAME + " s ON e." +
-            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID + 
+            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID +
             " LEFT OUTER JOIN " + ComptesEntry.TABLE_NAME + " d ON e." +
-            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID + 
+            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID +
             " LEFT OUTER JOIN " + CategoryEntry.TABLE_NAME + " c ON e." +
-            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID + 
+            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID +
             " LEFT OUTER JOIN " + MoyensEntry.TABLE_NAME + " m ON e." +
-            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ; 
+            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ;
         return db.query(tablename,
                 new String[]{"e." + EntreesEntry._ID,
                     EntreesEntry.C_DAT,
@@ -138,13 +138,13 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         String tablename= EntreesEntry.TABLE_NAME +
             " e INNER JOIN " + ComptesEntry.TABLE_NAME + " s ON e." +
-            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID + 
+            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID +
             " LEFT OUTER JOIN " + ComptesEntry.TABLE_NAME + " d ON e." +
-            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID + 
+            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID +
             " LEFT OUTER JOIN " + CategoryEntry.TABLE_NAME + " c ON e." +
-            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID + 
+            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID +
             " LEFT OUTER JOIN " + MoyensEntry.TABLE_NAME + " m ON e." +
-            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ; 
+            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ;
         String selection= EntreesEntry.C_SYN + "=0";
         return db.query(tablename,
                 new String[]{"e." + EntreesEntry._ID,
@@ -166,20 +166,20 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         String tablename= EntreesEntry.TABLE_NAME +
             " e INNER JOIN " + ComptesEntry.TABLE_NAME + " s ON e." +
-            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID + 
+            EntreesEntry.C_CPS + " = s." +ComptesEntry.C_ID +
             " LEFT OUTER JOIN " + ComptesEntry.TABLE_NAME + " d ON e." +
-            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID + 
+            EntreesEntry.C_CPD + " = d." +ComptesEntry.C_ID +
             " LEFT OUTER JOIN " + CategoryEntry.TABLE_NAME + " c ON e." +
-            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID + 
+            EntreesEntry.C_CAT + " = c." +CategoryEntry.C_ID +
             " LEFT OUTER JOIN " + MoyensEntry.TABLE_NAME + " m ON e." +
-            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ; 
+            EntreesEntry.C_MOY + " = m." +MoyensEntry.C_ID ;
         String selection= EntreesEntry.C_SYN + "=1";
 	String limits= ""+(page*limit)+", "+limit;
         return db.query(tablename,
                 new String[]{"e." + EntreesEntry._ID,
                     EntreesEntry.C_DAT,
-                    "substr(" + EntreesEntry.C_DAT + ", 7, 4) y" , 
-                    "substr(" + EntreesEntry.C_DAT + ", 4, 2) m" , 
+                    "substr(" + EntreesEntry.C_DAT + ", 7, 4) y" ,
+                    "substr(" + EntreesEntry.C_DAT + ", 4, 2) m" ,
                     "substr(" + EntreesEntry.C_DAT + ",1,2) d",
                     "s." + ComptesEntry.C_NAME + " s_" + ComptesEntry.C_NAME,
                     EntreesEntry.C_CPS,
@@ -192,7 +192,7 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
                     EntreesEntry.C_COM,
                     EntreesEntry.C_PRI,
                 EntreesEntry.C_SYN},
-                    selection, null, null, null, "y,m,d", limits);
+                    selection, null, null, null, "y DESC, m DESC, d DESC", limits);
     }
     public Cursor getCompletions(){
         SQLiteDatabase db=this.getReadableDatabase();

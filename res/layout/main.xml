@@ -9,19 +9,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         >
-        <Button  
+        <Button
             android:id="@+id/my_sync_button"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:text="@string/my_sync_button_text"
             android:onClick="syncContent"
             />
-        <Button  
+        <Button
             android:id="@+id/my_add_button"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:text="@string/my_add_button_text"
             android:gravity="center|center_vertical"
             android:onClick="addEntry"
@@ -31,9 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="?android:attr/listDivider"
-        android:layout_marginTop="2dp"
         />
-    <android.support.v4.view.ViewPager 
+    <android.support.v4.view.ViewPager
         android:id="@+id/my_viewpager"
         android:layout_height="0dp"
         android:layout_width="fill_parent"
@@ -48,4 +47,3 @@
     </android.support.v4.view.ViewPager>
 
 </LinearLayout>
-
