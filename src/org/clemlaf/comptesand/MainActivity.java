@@ -9,7 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.view.LayoutInflater;
+import android.widget.EditText;
 import android.net.*;
+import org.apache.commons.codec.binary.Base64;
 import android.content.Intent;
 import android.content.Context;
 import android.app.AlertDialog;
@@ -134,10 +136,50 @@ public class MainActivity extends FragmentActivity implements DownloadWebpageTas
       hostn=this.sharedPref.getString(getString(R.string.my_pref_home_hostname),"");
     }
     if (networkInfo != null && networkInfo.isConnected() && hostn.length()>0) {
-      new DownloadWebpageTask(this,this).execute(new String[]{
-        hostn+getString(R.string.my_update_address),
-        hostn+getString(R.string.my_param_address)
-      });
+      boolean askpass=this.sharedPref.getBoolean(getString(R.string.my_pref_passauth),false);
+      if(askpass){
+        Log.e("CLEMLAF","asking pwd");
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.pwdprompt, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+        final EditText userInput = (EditText) promptsView.findViewById(R.id.my_username_txtent);
+        final EditText passInput = (EditText) promptsView.findViewById(R.id.my_password_txtent);
+        // set dialog message
+        final MainActivity cont=this;
+        alertDialogBuilder.setCancelable(true)
+        .setPositiveButton(R.string.my_go_button_text,
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog,int id) {
+            Log.e("CLEMLAF","auth clicked ok");
+            String name=userInput.getText().toString();
+            String password=passInput.getText().toString();
+            String authString = name + ":" + password;
+            byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
+            String authStringEnc = new String(authEncBytes);
+            Log.e("CLEMLAF",authStringEnc);
+            String hostn="";
+            if(sharedPref.getBoolean(getString(R.string.my_pref_nothome),false)){
+              hostn=sharedPref.getString(getString(R.string.my_pref_out_hostname),"");
+            }else{
+              hostn=sharedPref.getString(getString(R.string.my_pref_home_hostname),"");
+            }
+            new DownloadWebpageTask(cont,cont).execute(new String[]{
+              hostn+getString(R.string.my_update_address),
+              hostn+getString(R.string.my_param_address),
+              authStringEnc
+            });
+          }
+        });
+        AlertDialog ald=alertDialogBuilder.create();
+        ald.show();
+      }
+      else{
+        new DownloadWebpageTask(this,this).execute(new String[]{
+          hostn+getString(R.string.my_update_address),
+          hostn+getString(R.string.my_param_address)
+        });
+      }
     } else if (hostn.length()==0) {
       Toast.makeText(this,getString(R.string.my_errnohn_toast_text),Toast.LENGTH_SHORT).show();
     } else {

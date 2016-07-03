@@ -3,18 +3,32 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
         >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        >
         <EditText
             android:id="@+id/my_date_txtent"
-            android:layout_width="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/my_date_txtent_text"
             android:onClick="showDate"
             />
+        <Button
+            android:id="@+id/my_today_button"
+            android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/my_today_button_text"
+            android:onClick="setToday"
+            />
+    </LinearLayout>
         <Spinner
             android:id="@+id/my_cps_spin"
             android:layout_width="fill_parent"
@@ -53,31 +67,31 @@
             android:hint="@string/my_prix_txtent_text"
             android:inputType="numberDecimal|numberSigned"
             />
-        <Button  
+        <Button
             android:id="@+id/my_send_button"
-            android:layout_width="fill_parent" 
-            android:layout_height="wrap_content" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="@string/my_send_button_text"
             android:onClick="sendForm"
             />
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-            <Button  
+            <Button
                 android:id="@+id/my_delete_button"
-                android:layout_width="0dp" 
-                android:layout_height="wrap_content" 
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/my_delete_button_text"
                 android:onClick="deleteForm"
                 android:visibility="gone"
                 />
-            <Button  
+            <Button
                 android:id="@+id/my_dupe_button"
-                android:layout_width="0dp" 
-                android:layout_height="wrap_content" 
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/my_dupe_button_text"
                 android:onClick="newForm"

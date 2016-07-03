@@ -64,6 +64,7 @@ public class AddActivity extends Activity
         Button savbut=(Button) findViewById(R.id.my_send_button);
         Button delbut=(Button) findViewById(R.id.my_delete_button);
         Button newbut=(Button) findViewById(R.id.my_dupe_button);
+        Button todbut=(Button) findViewById(R.id.my_today_button);
         if(curId>=0){
             newbut.setVisibility(Button.VISIBLE);
             delbut.setVisibility(Button.VISIBLE);
@@ -71,10 +72,27 @@ public class AddActivity extends Activity
             newbut.setVisibility(Button.GONE);
             delbut.setVisibility(Button.GONE);
         }
-        if(isSynced>0)
+        if(isSynced>0){
+            dateETxt.setEnabled(false);
+            commETxt.setEnabled(false);
+            prixETxt.setEnabled(false);
+            cpsSpin.setEnabled (false);
+            cpdSpin.setEnabled (false);
+            catSpin.setEnabled (false);
+            moySpin.setEnabled (false);
             savbut.setVisibility(Button.GONE);
-        else
+            todbut.setVisibility(Button.GONE);
+        }else{
+            dateETxt.setEnabled(true);
+            commETxt.setEnabled(true);
+            prixETxt.setEnabled(true);
+            cpsSpin.setEnabled (true);
+            cpdSpin.setEnabled (true);
+            catSpin.setEnabled (true);
+            moySpin.setEnabled (true);
             savbut.setVisibility(Button.VISIBLE);
+            todbut.setVisibility(Button.VISIBLE);
+        }
     }
     private void findViewByIds(){
         dateETxt= (EditText) findViewById(R.id.my_date_txtent);
@@ -85,29 +103,29 @@ public class AddActivity extends Activity
         cpdSpin=(Spinner) findViewById(R.id.my_cpd_spin);
         catSpin=(Spinner) findViewById(R.id.my_cat_spin);
         moySpin=(Spinner) findViewById(R.id.my_moy_spin);
-	MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
-	SimpleCursorAdapter cpsAdapt= new SimpleCursorAdapter(this,
+      	MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
+	      SimpleCursorAdapter cpsAdapt= new SimpleCursorAdapter(this,
 			android.R.layout.simple_spinner_item,
 			myDBOH.getAllComptes(),
 			new String[] { MyDatabaseOpenHelper.ComptesEntry.C_NAME },
 			new int[] { android.R.id.text1}	);
 	cpsAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	cpsSpin.setAdapter(cpsAdapt);
-	SimpleCursorAdapter cpdAdapt= new SimpleCursorAdapter(this,
+	      SimpleCursorAdapter cpdAdapt= new SimpleCursorAdapter(this,
 			android.R.layout.simple_spinner_item,
 			myDBOH.getAllComptes(),
 			new String[] { MyDatabaseOpenHelper.ComptesEntry.C_NAME },
 			new int[] { android.R.id.text1}	);
 	cpdAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	cpdSpin.setAdapter(cpdAdapt);
-	SimpleCursorAdapter catAdapt= new SimpleCursorAdapter(this,
+	      SimpleCursorAdapter catAdapt= new SimpleCursorAdapter(this,
 			android.R.layout.simple_spinner_item,
 			myDBOH.getAllCategories(),
 			new String[] { MyDatabaseOpenHelper.CategoryEntry.C_NAME },
 			new int[] { android.R.id.text1}	);
 	catAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	catSpin.setAdapter(catAdapt);
-	SimpleCursorAdapter moyAdapt= new SimpleCursorAdapter(this,
+	      SimpleCursorAdapter moyAdapt= new SimpleCursorAdapter(this,
 			android.R.layout.simple_spinner_item,
 			myDBOH.getAllMoyens(),
 			new String[] { MyDatabaseOpenHelper.MoyensEntry.C_NAME },
@@ -240,7 +258,10 @@ public class AddActivity extends Activity
     public void reset(View v){
     }
     public void showDate(View v){
-            myDatePickerDialog.show();
+        myDatePickerDialog.show();
+    }
+    public void setToday(View v){
+        Calendar newDate = Calendar.getInstance();
+        dateETxt.setText(dateFormatter.format(newDate.getTime()));
     }
 }
-

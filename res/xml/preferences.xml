@@ -5,6 +5,11 @@
         android:title="@string/my_pref_nothome_title"
         android:summary="@string/my_pref_nothome_sum"
         android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="@string/my_pref_passauth"
+        android:title="@string/my_pref_passauth_title"
+        android:summary="@string/my_pref_passauth_sum"
+        android:defaultValue="false" />
     <EditTextPreference
         android:id="@+id/my_pref_home"
         android:key="@string/my_pref_home_hostname"

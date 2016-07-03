@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.content.Context;
 import java.io.*;
 import java.net.*;
+//import java.util.Base64;
 import java.lang.ref.WeakReference;
 import android.net.*;
 import java.security.cert.Certificate;
@@ -25,7 +26,9 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
   private int nid=1;
   private MyDatabaseOpenHelper myDBOH;
   private Context cont;
-  String path;
+  private String path;
+  private boolean askpass;
+  private String authStringEnc;
   public interface TaskListener{
     void onFinishSync();
   }
@@ -50,6 +53,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
     myNot.notify(this.nid,myNotBuilder.build());
     myDBOH = new MyDatabaseOpenHelper(cont);
     path=PreferenceManager.getDefaultSharedPreferences(cont).getString(cont.getString(R.string.my_pref_crt_path),"");
+    askpass=PreferenceManager.getDefaultSharedPreferences(cont).getBoolean(cont.getString(R.string.my_pref_passauth),false);
   }
   @Override
   protected String doInBackground(String... urls) {
@@ -96,6 +100,8 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
     }
     cc.close();
     String getUrl="";
+    if(urls.length > 2)
+      authStringEnc=urls[2];
     try{
       JSONObject pack=new JSONObject();
       pack.put("entrees", entrees);
@@ -106,14 +112,17 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         }
         getUrl=getUrl.substring(3);
       }
-    } catch (JSONException e) {
+    }
+    catch (JSONException e) {
       Log.e("CLEMLAF","error building json");
-      return "Unable to build up JSON request.";
-    } catch (IOException e) {
+      getUrl= "Unable to build up JSON request.";
+    }
+    catch (IOException e) {
       Log.e("CLEMLAF",urls[0]);
-      return "Unable to retrieve web page. URL may be invalid.";
+      getUrl= "Unable to retrieve web page. URL may be invalid.";
     }
     // params comes from the execute() call: params[0] is the url.
+      authStringEnc=null;
     return getUrl;
   }
   // onPostExecute displays the results of the AsyncTask.
@@ -156,6 +165,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
       // Load CAs from an InputStream
       // (could be from a resource or ByteArrayInputStream or ...)
       SSLContext context=null;
+
       if (path.length()>0){
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         File caFile=new File(path);
@@ -199,6 +209,10 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
       conn.setDoInput(true);
       conn.setDoOutput(true);
       conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+      if(askpass){
+        conn.setRequestProperty("Authorization", "Basic " + authStringEnc);
+        Log.e("CLEMLAF", authStringEnc);
+      }
       conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
       conn.setFixedLengthStreamingMode(params.toString().getBytes("utf-8").length);
       //Send request
@@ -232,7 +246,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
     }
   }
   // Reads an InputStream and converts it to a String.
-  public String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
+  private String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
     StringBuilder sb = new StringBuilder();
     String line = null;

@@ -14,6 +14,7 @@
     <string name="my_unsync_tab_title">En attente</string>
     <string name="my_sync_tab_title">Synchronisées</string>
     <string name="my_date_txtent_text">Date</string>
+    <string name="my_today_button_text">Auj.</string>
     <string name="my_cps_spin_text">Compte source</string>
     <string name="my_cpd_spin_text">Compte destination</string>
     <string name="my_moy_spin_text">Moyen</string>
@@ -23,6 +24,9 @@
     <string name="my_send_button_text">Enregistrer</string>
     <string name="my_delete_button_text">Supprimer</string>
     <string name="my_dupe_button_text">Dupliquer</string>
+    <string name="my_go_button_text">ok</string>
+    <string name="my_username_txtent_text">login</string>
+    <string name="my_password_txtent_text">mot de passe</string>
     <string name="my_saved_toast_text">Entrée sauvegardée</string>
     <string name="my_synced_toast_text">Paramètres synchronisés</string>
     <string name="my_deleted_toast_text">Entrée supprimée</string>
@@ -37,6 +41,9 @@
     <string name="my_pref_nothome">org.clemlaf.comptesand.NOTHOME</string>
     <string name="my_pref_nothome_title">Suis-je à l\'extérieur ?</string>
     <string name="my_pref_nothome_sum">Cocher la case pour utiliser l\'adresse sur le réseau externe</string>
+    <string name="my_pref_passauth">org.clemlaf.comptesand.PASSAUTH</string>
+    <string name="my_pref_passauth_title">Authentification par mot de passe ?</string>
+    <string name="my_pref_passauth_sum">Cocher la case pour utiliser activer l\'authentification par mot de passe externe</string>
     <string name="my_pref_home_hostname">org.clemlaf.comptesand.HOME_HOSTNAME</string>
     <string name="my_pref_home_hn_title">Adresse site comptes à la maison</string>
     <string name="my_pref_home_hn_sum">Adresse à laquelle se connecter pour la synchronisation sur le réseau local</string>
