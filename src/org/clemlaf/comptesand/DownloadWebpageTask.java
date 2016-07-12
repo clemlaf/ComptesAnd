@@ -198,7 +198,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
       if(myurl.startsWith("https://")){
         HttpsURLConnection conns = (HttpsURLConnection) url.openConnection();
         if(context!=null)
-        conns.setSSLSocketFactory(context.getSocketFactory());
+          conns.setSSLSocketFactory(context.getSocketFactory());
         conn= (HttpURLConnection) conns;
       }else{
         conn = (HttpURLConnection) url.openConnection();

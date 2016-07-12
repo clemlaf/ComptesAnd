@@ -53,8 +53,8 @@ public class AddActivity extends Activity
             curId=myIntent.getLongExtra(MainActivity.EXTRAID,-1);
         }
         findViewByIds();
-        showHiddenButtons();
-        setDateTimeField();
+	setDateTimeField();
+	showHiddenButtons();
         /*if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new PlaceholderFragment()).commit();
@@ -92,125 +92,133 @@ public class AddActivity extends Activity
             moySpin.setEnabled (true);
             savbut.setVisibility(Button.VISIBLE);
             todbut.setVisibility(Button.VISIBLE);
+            Calendar now = Calendar.getInstance();
+            long diff= now.getTimeInMillis();
+            String dateString=dateETxt.getText().toString();
+            if(dateString!=null && dateString.length() > 0){
+              try{
+                diff-=dateFormatter.parse(dateString).getTime();
+                Log.e("CLEMLAF","diff "+diff);
+                if (diff<0 || diff > 3600*1000*24)
+                todbut.setEnabled(true);
+                else
+                todbut.setEnabled(false);
+              }catch (Exception e){
+                Log.e("CLEMLAF","erreur Date");
+              }
+            }
+          }
         }
-    }
-    private void findViewByIds(){
-        dateETxt= (EditText) findViewById(R.id.my_date_txtent);
-        dateETxt.setInputType(InputType.TYPE_NULL);
-        commETxt=(EditText) findViewById(R.id.my_comm_txtent);
-        prixETxt=(EditText) findViewById(R.id.my_prix_txtent);
-        cpsSpin=(Spinner) findViewById(R.id.my_cps_spin);
-        cpdSpin=(Spinner) findViewById(R.id.my_cpd_spin);
-        catSpin=(Spinner) findViewById(R.id.my_cat_spin);
-        moySpin=(Spinner) findViewById(R.id.my_moy_spin);
-      	MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
-	      SimpleCursorAdapter cpsAdapt= new SimpleCursorAdapter(this,
-			android.R.layout.simple_spinner_item,
-			myDBOH.getAllComptes(),
-			new String[] { MyDatabaseOpenHelper.ComptesEntry.C_NAME },
-			new int[] { android.R.id.text1}	);
-	cpsAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	cpsSpin.setAdapter(cpsAdapt);
-	      SimpleCursorAdapter cpdAdapt= new SimpleCursorAdapter(this,
-			android.R.layout.simple_spinner_item,
-			myDBOH.getAllComptes(),
-			new String[] { MyDatabaseOpenHelper.ComptesEntry.C_NAME },
-			new int[] { android.R.id.text1}	);
-	cpdAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	cpdSpin.setAdapter(cpdAdapt);
-	      SimpleCursorAdapter catAdapt= new SimpleCursorAdapter(this,
-			android.R.layout.simple_spinner_item,
-			myDBOH.getAllCategories(),
-			new String[] { MyDatabaseOpenHelper.CategoryEntry.C_NAME },
-			new int[] { android.R.id.text1}	);
-	catAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	catSpin.setAdapter(catAdapt);
-	      SimpleCursorAdapter moyAdapt= new SimpleCursorAdapter(this,
-			android.R.layout.simple_spinner_item,
-			myDBOH.getAllMoyens(),
-			new String[] { MyDatabaseOpenHelper.MoyensEntry.C_NAME },
-			new int[] { android.R.id.text1}	);
-	moyAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	moySpin.setAdapter(moyAdapt);
-	/*SimpleCursorAdapter commAdapt= new SimpleCursorAdapter(this,
-			android.R.layout.simple_dropdown_item_1line,
-			myDBOH.getCompletions(),
-			new String[] { MyDatabaseOpenHelper.EntreesEntry.C_COM },
-			new int[] { android.R.id.text1}	);
-        commETxt.setAdapter(commAdapt);
-        commAdapt.setCursorToStringConverter(new CursorToStringConverter() {
-            public String convertToString(Cursor cursor) {
-                // Get the label for this row out of the "state" column
-                final int columnIndex = cursor.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM);
-                final String str = cursor.getString(columnIndex);
-                return str;
+        private void findViewByIds(){
+          dateETxt= (EditText) findViewById(R.id.my_date_txtent);
+          dateETxt.setInputType(InputType.TYPE_NULL);
+          commETxt=(EditText) findViewById(R.id.my_comm_txtent);
+          prixETxt=(EditText) findViewById(R.id.my_prix_txtent);
+          cpsSpin=(Spinner) findViewById(R.id.my_cps_spin);
+          cpdSpin=(Spinner) findViewById(R.id.my_cpd_spin);
+          catSpin=(Spinner) findViewById(R.id.my_cat_spin);
+          moySpin=(Spinner) findViewById(R.id.my_moy_spin);
+          MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
+          SimpleCursorAdapter cpsAdapt= new SimpleCursorAdapter(this,
+            android.R.layout.simple_spinner_item,
+            myDBOH.getAllComptes(),
+            new String[] { MyDatabaseOpenHelper.ComptesEntry.C_NAME },
+            new int[] { android.R.id.text1}	);
+          cpsAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          cpsSpin.setAdapter(cpsAdapt);
+          SimpleCursorAdapter cpdAdapt= new SimpleCursorAdapter(this,
+            android.R.layout.simple_spinner_item,
+            myDBOH.getAllComptes(),
+            new String[] { MyDatabaseOpenHelper.ComptesEntry.C_NAME },
+            new int[] { android.R.id.text1}	);
+          cpdAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          cpdSpin.setAdapter(cpdAdapt);
+          SimpleCursorAdapter catAdapt= new SimpleCursorAdapter(this,
+            android.R.layout.simple_spinner_item,
+            myDBOH.getAllCategories(),
+            new String[] { MyDatabaseOpenHelper.CategoryEntry.C_NAME },
+            new int[] { android.R.id.text1}	);
+          catAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          catSpin.setAdapter(catAdapt);
+          SimpleCursorAdapter moyAdapt= new SimpleCursorAdapter(this,
+            android.R.layout.simple_spinner_item,
+            myDBOH.getAllMoyens(),
+            new String[] { MyDatabaseOpenHelper.MoyensEntry.C_NAME },
+            new int[] { android.R.id.text1}	);
+          moyAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+          moySpin.setAdapter(moyAdapt);
+          /*SimpleCursorAdapter commAdapt= new SimpleCursorAdapter(this,
+          android.R.layout.simple_dropdown_item_1line,
+          myDBOH.getCompletions(),
+          new String[] { MyDatabaseOpenHelper.EntreesEntry.C_COM },
+          new int[] { android.R.id.text1}	);
+          commETxt.setAdapter(commAdapt);
+          commAdapt.setCursorToStringConverter(new CursorToStringConverter() {
+          public String convertToString(Cursor cursor) {
+          // Get the label for this row out of the "state" column
+          final int columnIndex = cursor.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM);
+          final String str = cursor.getString(columnIndex);
+          return str;
+        }
+      });*/
+      if (curId>0){
+        Cursor cc=myDBOH.getEntree(curId);
+        cc.moveToFirst();
+        dateETxt.setText(cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_DAT)));
+        commETxt.setText(cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM)));
+        prixETxt.setText(cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_PRI)));
+        Spinner st[]={cpsSpin, cpdSpin, catSpin, moySpin};
+        SimpleCursorAdapter at[]={cpsAdapt, cpdAdapt, catAdapt, moyAdapt};
+        int valt[]={
+          cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CPS)),
+          cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CPD)),
+          cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CAT)),
+          cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_MOY))};
+          String ct[]={MyDatabaseOpenHelper.ComptesEntry.C_ID,
+            MyDatabaseOpenHelper.ComptesEntry.C_ID,
+            MyDatabaseOpenHelper.CategoryEntry.C_ID,
+            MyDatabaseOpenHelper.MoyensEntry.C_ID,
+          };
+          for (int i=0; i< st.length; i++){
+            for (int j=0; j<at[i].getCount(); j++){
+              Cursor ca=(Cursor) at[i].getItem(j);
+              if(ca.getInt(ca.getColumnIndex(ct[i])) == valt[i]){
+                st[i].setSelection(j);
+                break;
+              }
             }
-        });*/
-        if (curId>0){
-            Cursor cc=myDBOH.getEntree(curId);
-            cc.moveToFirst();
-            dateETxt.setText(cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_DAT)));
-            commETxt.setText(cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM)));
-            prixETxt.setText(cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_PRI)));
-            Spinner st[]={cpsSpin, cpdSpin, catSpin, moySpin};
-            SimpleCursorAdapter at[]={cpsAdapt, cpdAdapt, catAdapt, moyAdapt};
-            int valt[]={
-                cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CPS)),
-                cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CPD)),
-                cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_CAT)),
-                cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_MOY))};
-            String ct[]={MyDatabaseOpenHelper.ComptesEntry.C_ID,
-                MyDatabaseOpenHelper.ComptesEntry.C_ID,
-                MyDatabaseOpenHelper.CategoryEntry.C_ID,
-                MyDatabaseOpenHelper.MoyensEntry.C_ID,
-            };
-            for (int i=0; i< st.length; i++){
-                for (int j=0; j<at[i].getCount(); j++){
-                    Cursor ca=(Cursor) at[i].getItem(j);
-                    if(ca.getInt(ca.getColumnIndex(ct[i])) == valt[i]){
-                        st[i].setSelection(j);
-                        break;
-                    }
-                }
-            }
-            isSynced=cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_SYN));
+          }
+          isSynced=cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_SYN));
         }
 
-    }
+      }
 
-    private void setDateTimeField() {
+      private void setDateTimeField() {
         //dateETxt.setOnClickListener(this);
         Calendar newCalendar=Calendar.getInstance();
-	String dateString=dateETxt.getText().toString();
-	if(dateString!=null)
-            try{
-            newCalendar.setTime(dateFormatter.parse(dateString));
-            }catch (Exception e){
-                Log.e("CLEMLAF","erreur Date");
-            }
-        myDatePickerDialog= new DatePickerDialog(this, new OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                dateETxt.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-    }
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle app bar item clicks here. The app bar
-        // automatically handles clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        String dateString=dateETxt.getText().toString();
+        if(dateString==null){
+          dateETxt.setText(dateFormatter.format(newCalendar.getTime()));
+          dateString=dateETxt.getText().toString();
         }
-        return super.onOptionsItemSelected(item);
-    }*/
+        if(dateString!=null)
+        try{
+          newCalendar.setTime(dateFormatter.parse(dateString));
+        }catch (Exception e){
+          Log.e("CLEMLAF","erreur Date");
+        }
+        myDatePickerDialog= new DatePickerDialog(this, new OnDateSetListener() {
+          public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, monthOfYear, dayOfMonth);
+            dateETxt.setText(dateFormatter.format(newDate.getTime()));
+            showHiddenButtons();
+          }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+      }
 
-    public void sendForm(View v){
-	MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
-        String message="";
+      public void sendForm(View v){
+        MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
         int cps;
         int cpd;
         int cat;
@@ -225,43 +233,38 @@ public class AddActivity extends Activity
         cat=(cc==null) ? 0 : cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.CategoryEntry.C_ID));
         cc=(Cursor) moySpin.getSelectedItem();
         moy=(cc==null) ? 0 : cc.getInt(cc.getColumnIndex(MyDatabaseOpenHelper.MoyensEntry.C_ID));
-        message=dateETxt.getText()+"\n"+
-            String.valueOf(cps)+"\n"+
-            String.valueOf(cpd)+"\n"+
-            String.valueOf(cat)+"\n"+
-            String.valueOf(moy)+"\n"+
-            commETxt.getText()+"\n"+
-            prixETxt.getText();
         if (cps>0 && (prixETxt.getText()).length()>0)
-            res = myDBOH.addEntree(curId, dateETxt.getText().toString(),
-                cps, cpd, cat, moy,
-                commETxt.getText().toString(),
-                Float.parseFloat(prixETxt.getText().toString()));
+          res = myDBOH.addEntree(curId, dateETxt.getText().toString(),
+            cps, cpd, cat, moy,
+            commETxt.getText().toString(),
+            Float.parseFloat(prixETxt.getText().toString()));
         if(curId<0)
-            curId=res;
+          curId=res;
         showHiddenButtons();
         Toast.makeText(this,getString(R.string.my_saved_toast_text),Toast.LENGTH_SHORT).show();
-    }
-    public void deleteForm(View v){
+      }
+      public void deleteForm(View v){
         if(curId>=0){
-            MyDatabaseOpenHelper myDBOH = new MyDatabaseOpenHelper(this);
-            myDBOH.deleteEntree(curId);
-            Toast.makeText(this,getString(R.string.my_deleted_toast_text),Toast.LENGTH_SHORT).show();
-            finish();
+          MyDatabaseOpenHelper myDBOH = new MyDatabaseOpenHelper(this);
+          myDBOH.deleteEntree(curId);
+          Toast.makeText(this,getString(R.string.my_deleted_toast_text),Toast.LENGTH_SHORT).show();
+          finish();
         }
-    }
-    public void newForm(View v){
+      }
+      public void newForm(View v){
         curId=-1;
         isSynced=0;
         showHiddenButtons();
-    }
-    public void reset(View v){
-    }
-    public void showDate(View v){
+      }
+      public void reset(View v){
+      }
+      public void showDate(View v){
         myDatePickerDialog.show();
-    }
-    public void setToday(View v){
+      }
+      public void setToday(View v){
         Calendar newDate = Calendar.getInstance();
         dateETxt.setText(dateFormatter.format(newDate.getTime()));
+        setDateTimeField();
+        showHiddenButtons();
+      }
     }
-}
