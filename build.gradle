@@ -1,0 +1,38 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:2.3.0'
+	}
+}
+
+
+apply plugin: 'android'
+
+dependencies{
+        compile 'com.android.support:support-v4:25.3.1'
+}
+
+android {
+	compileSdkVersion 25
+	buildToolsVersion "25.0.2"
+
+	signingConfigs {
+		release {
+			storeFile file('keystore')
+			storePassword 'hellomyworld'
+			keyAlias 'Android Release Key'
+			keyPassword 'hellomyworld'
+		}
+	}
+
+	buildTypes {
+		release {
+			signingConfig signingConfigs.release
+		}
+		debug {
+			applicationIdSuffix ".debug"
+		}
+	}
+}

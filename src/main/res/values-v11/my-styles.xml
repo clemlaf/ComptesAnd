@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LightTheme" parent="android:Theme.Holo.Light" >
+	    <item name="android:buttonStyle">@style/MyButton</item>
+    </style>
+    <style name="MyButton" parent="android:Widget.Button">
+	    <item name="android:textSize">14sp</item>
+    </style>
+</resources>
