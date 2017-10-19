@@ -44,7 +44,7 @@ public class MyListFragment extends Fragment implements AdapterView.OnItemClickL
     paged=getArguments().getBoolean(EXTRA_PAGED);
     synced=getArguments().getBoolean(EXTRA_SYNC);
     synclimit=Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(myActivity).getString(myActivity.getString(R.string.my_pref_nbpage),"30"));
-    myDBOH=new MyDatabaseOpenHelper(myActivity);
+    myDBOH=MyDatabaseOpenHelper.getInstance(myActivity);
     listAdapt= new SimpleCursorAdapter(myActivity,
     R.layout.listitem,
     null,

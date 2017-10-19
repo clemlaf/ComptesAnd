@@ -51,7 +51,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
     .setSmallIcon(android.R.drawable.ic_popup_sync);
     NotificationManagerCompat myNot=NotificationManagerCompat.from(cont);
     myNot.notify(this.nid,myNotBuilder.build());
-    myDBOH = new MyDatabaseOpenHelper(cont);
+    myDBOH = MyDatabaseOpenHelper.getInstance(cont);
     path=PreferenceManager.getDefaultSharedPreferences(cont).getString(cont.getString(R.string.my_pref_crt_path),"");
     askpass=PreferenceManager.getDefaultSharedPreferences(cont).getBoolean(cont.getString(R.string.my_pref_passauth),false);
   }
@@ -130,7 +130,7 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
   protected void onPostExecute(String result) {
     try {
       JSONObject jd=new JSONObject(result);
-      myDBOH = new MyDatabaseOpenHelper(cont);
+      myDBOH = MyDatabaseOpenHelper.getInstance(cont);
       myDBOH.emptyParams();
       String params[]={"comptes","categories","moyens"};
       String tables[]={

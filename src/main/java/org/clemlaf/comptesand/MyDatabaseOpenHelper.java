@@ -10,6 +10,7 @@ import android.provider.BaseColumns;
 public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "ComptesAnd.db";
+    private static MyDatabaseOpenHelper mInstance=null;
 
     public static abstract class CategoryEntry implements BaseColumns{
         public static final String TABLE_NAME = "category";
@@ -76,7 +77,13 @@ public class MyDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String ENTREES_TABLE_DELETE =
         "DROP TABLE IF EXISTS " + EntreesEntry.TABLE_NAME;
 
-    public MyDatabaseOpenHelper(Context context) {
+    public static MyDatabaseOpenHelper getInstance(Context ctx){
+	if(mInstance == null){
+	    mInstance=new MyDatabaseOpenHelper(ctx.getApplicationContext());
+	}
+	return mInstance;
+    }
+    private MyDatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     @Override

@@ -118,7 +118,7 @@ public class AddActivity extends Activity
           cpdSpin=(Spinner) findViewById(R.id.my_cpd_spin);
           catSpin=(Spinner) findViewById(R.id.my_cat_spin);
           moySpin=(Spinner) findViewById(R.id.my_moy_spin);
-          MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
+          MyDatabaseOpenHelper myDBOH= MyDatabaseOpenHelper.getInstance(this);
           SimpleCursorAdapter cpsAdapt= new SimpleCursorAdapter(this,
             android.R.layout.simple_spinner_item,
             myDBOH.getAllComptes(),
@@ -218,7 +218,7 @@ public class AddActivity extends Activity
       }
 
       public void sendForm(View v){
-        MyDatabaseOpenHelper myDBOH= new MyDatabaseOpenHelper(this);
+        MyDatabaseOpenHelper myDBOH= MyDatabaseOpenHelper.getInstance(this);
         int cps;
         int cpd;
         int cat;
@@ -245,7 +245,7 @@ public class AddActivity extends Activity
       }
       public void deleteForm(View v){
         if(curId>=0){
-          MyDatabaseOpenHelper myDBOH = new MyDatabaseOpenHelper(this);
+          MyDatabaseOpenHelper myDBOH = MyDatabaseOpenHelper.getInstance(this);
           myDBOH.deleteEntree(curId);
           Toast.makeText(this,getString(R.string.my_deleted_toast_text),Toast.LENGTH_SHORT).show();
           finish();
