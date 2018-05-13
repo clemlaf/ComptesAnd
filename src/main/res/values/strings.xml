@@ -7,10 +7,6 @@
     <string name="my_add_button_text">Ajouter entrée</string>
     <string name="my_showprev_button_text">Afficher précédents</string>
     <string name="my_shownext_button_text">Afficher suivants</string>
-    <string name="my_showsync_button_text">Afficher synchronisés</string>
-    <string name="my_showunsync_button_text">Afficher non synchronisés</string>
-    <string name="my_unsync_list_title">Liste des entrées pas encore synchronisées</string>
-    <string name="my_sync_list_title">Liste des entrées déjà synchronisées</string>
     <string name="my_unsync_tab_title">En attente</string>
     <string name="my_sync_tab_title">Synchronisées</string>
     <string name="my_date_txtent_text">Date</string>
@@ -24,7 +20,7 @@
     <string name="my_send_button_text">Enregistrer</string>
     <string name="my_delete_button_text">Supprimer</string>
     <string name="my_dupe_button_text">Dupliquer</string>
-    <string name="my_go_button_text">ok</string>
+    <string name="my_go_button_text">OK</string>
     <string name="my_username_txtent_text">login</string>
     <string name="my_password_txtent_text">mot de passe</string>
     <string name="my_saved_toast_text">Entrée sauvegardée</string>

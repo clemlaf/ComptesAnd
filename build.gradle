@@ -20,10 +20,10 @@ android {
 
 	signingConfigs {
 		release {
-			storeFile file('keystore')
-			storePassword 'hellomyworld'
-			keyAlias 'Android Release Key'
-			keyPassword 'hellomyworld'
+			storeFile file('../mykey.keystore')
+			storePassword 'tubuline'
+			keyAlias 'comptesand'
+			keyPassword 'tubuline'
 		}
 	}
 

@@ -240,8 +240,9 @@ public class AddActivity extends Activity
             Float.parseFloat(prixETxt.getText().toString()));
         if(curId<0)
           curId=res;
-        showHiddenButtons();
+        //showHiddenButtons();
         Toast.makeText(this,getString(R.string.my_saved_toast_text),Toast.LENGTH_SHORT).show();
+	finish();
       }
       public void deleteForm(View v){
         if(curId>=0){

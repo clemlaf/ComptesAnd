@@ -74,13 +74,14 @@ public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
           idList.add(id);
           ent.put("id","new");
           ent.put("date",cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_DAT)));
-          ent.put("cpS_id",cps==0 ? "" : cps);
-          ent.put("cpD_id",cpd==0 ? "" : cpd);
-          ent.put("category_id", cat==0 ? "" : cat);
-          ent.put("moyen_id", moy==0 ? "" : moy);
+          ent.put("cpS_id",cps==0 ? "" : ""+cps);
+          ent.put("cpD_id",cpd==0 ? "" : ""+cpd);
+          ent.put("category_id", cat==0 ? "" : ""+cat);
+          ent.put("moyen_id", moy==0 ? "" : ""+moy);
           ent.put("com",cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_COM)));
-          ent.put("pr",cc.getFloat(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_PRI)));
+          ent.put("pr",String.format("%.2f",cc.getFloat(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_PRI))));
           ent.put("poS","false");
+          ent.put("poD","false");
           /*ent="id=new&date="+
           cc.getString(cc.getColumnIndex(MyDatabaseOpenHelper.EntreesEntry.C_DAT))+
           "&cp_s="+(cps==0?"":cps)+
