@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ClemLaf\'s ComptesAnd</string>
+    <string name="add_act_name">Add entry</string>
+    <string name="my_sync_button_text">Sync</string>
+    <string name="my_tolist_button_text">Show</string>
+    <string name="my_add_button_text">Add entry</string>
+    <string name="my_showprev_button_text">Show previous</string>
+    <string name="my_shownext_button_text">Show next</string>
+    <string name="my_unsync_tab_title">To sync</string>
+    <string name="my_sync_tab_title">Synced</string>
+    <string name="my_date_txtent_text">Date</string>
+    <string name="my_today_button_text">Today</string>
+    <string name="my_cps_spin_text">From account</string>
+    <string name="my_cpd_spin_text">To account</string>
+    <string name="my_moy_spin_text">Method of payment</string>
+    <string name="my_cat_spin_text">Category</string>
+    <string name="my_comm_txtent_text">Comment</string>
+    <string name="my_prix_txtent_text">Amount</string>
+    <string name="my_send_button_text">Save</string>
+    <string name="my_delete_button_text">Delete</string>
+    <string name="my_dupe_button_text">Duplicate</string>
+    <string name="my_go_button_text">Ok</string>
+    <string name="my_password_txtent_text">Password</string>
+    <string name="my_saved_toast_text">Record saved</string>
+    <string name="my_synced_toast_text">Parameters synced</string>
+    <string name="my_deleted_toast_text">Deleted entry</string>
+    <string name="my_errj_toast_text">JSON error</string>
+    <string name="my_errc_toast_text">Connection error</string>
+    <string name="my_errnoc_toast_text">Connection unavailable!</string>
+    <string name="my_errnohn_toast_text">Accounting backend website not defined</string>
+    <string name="my_param_address">/param/list</string>
+    <string name="my_pref_nothome_title">Am I away from home ?</string>
+    <string name="my_pref_nothome_sum">Tick to use external network address</string>
+    <string name="my_pref_passauth_title">Password authentication</string>
+    <string name="my_pref_passauth_sum">Tick to use password authentication</string>
+    <string name="my_pref_home_hn_title">Home back-end address</string>
+    <string name="my_pref_home_hn_sum">Local network back-end website</string>
+    <string name="my_pref_out_hn_title">External back-end address</string>
+    <string name="my_pref_out_hn_sum">App site address on external network</string>
+    <string name="my_pref_crt_path_title">Path to SSL certificate</string>
+    <string name="my_pref_nbpage_title">Number of records per page</string>
+    <string name="my_settings_title">Options</string>
+    <string name="my_not_title">ComptesAnd - Sync</string>
+    <string name="my_not_text">Synchronizing...</string>
+</resources>
